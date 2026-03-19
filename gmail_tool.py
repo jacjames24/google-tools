@@ -15,20 +15,24 @@ from googleapiclient.discovery import build
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 CREDENTIALS_PATH = r"C:\Users\jacja\Downloads\API Keys\client_secret_346514819391-k9oh1pm26nulrcan17qc9nlhtcq4ui4p.apps.googleusercontent.com.json"
-TOKEN_PATH = r"C:\Users\jacja\Downloads\API Keys\token.json"
+
+ACCOUNTS = [
+    {"name": "Personal", "token": r"C:\Users\jacja\Downloads\API Keys\token_personal.json"},
+    {"name": "Freelance", "token": r"C:\Users\jacja\Downloads\API Keys\token_freelance.json"},
+]
 
 
-def authenticate():
+def authenticate(token_path):
     creds = None
-    if os.path.exists(TOKEN_PATH):
-        creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
+    if os.path.exists(token_path):
+        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_PATH, SCOPES)
             creds = flow.run_local_server(port=0)
-        with open(TOKEN_PATH, "w") as token:
+        with open(token_path, "w") as token:
             token.write(creds.to_json())
     return creds
 
@@ -70,16 +74,19 @@ def mark_as_read(service, msg_ids):
     ).execute()
 
 
-def main():
-    print("Authenticating with Gmail...")
-    creds = authenticate()
+def process_account(account):
+    print(f"\n{'=' * 70}")
+    print(f"ACCOUNT: {account['name']}")
+    print(f"{'=' * 70}")
+    print("Authenticating...")
+    creds = authenticate(account["token"])
     service = build("gmail", "v1", credentials=creds)
 
     print("Fetching unread emails from the past 30 days...\n")
     messages = get_emails(service, days=30)
 
     if not messages:
-        print("No unread emails found in the past 30 days.")
+        print("No unread emails found.")
         return
 
     print(f"Found {len(messages)} unread email(s). Fetching details...\n")
@@ -89,13 +96,11 @@ def main():
         details = fetch_email_details(service, msg["id"])
         emails.append(details)
 
-    # Separate important vs rest
     important = [e for e in emails if is_important(e)]
     others = [e for e in emails if not is_important(e)]
 
-    print("=" * 70)
     print(f"IMPORTANT / PRIMARY ({len(important)} emails)")
-    print("=" * 70)
+    print("-" * 70)
     for i, e in enumerate(important, 1):
         print(f"\n[{i}] From:    {e['from']}")
         print(f"    Subject: {e['subject']}")
@@ -103,17 +108,15 @@ def main():
         print(f"    Preview: {e['snippet']}")
 
     if others:
-        print(f"\n{'=' * 70}")
-        print(f"OTHER UNREAD ({len(others)} emails)")
-        print("=" * 70)
+        print(f"\nOTHER UNREAD ({len(others)} emails)")
+        print("-" * 70)
         for i, e in enumerate(others, 1):
             print(f"\n[{i}] From:    {e['from']}")
             print(f"    Subject: {e['subject']}")
             print(f"    Date:    {e['date']}")
             print(f"    Preview: {e['snippet']}")
 
-    print("\n" + "=" * 70)
-    print("Mark emails as read?")
+    print("\nMark emails as read?")
     print("  [1] Mark all as read")
     print("  [2] Mark only important/primary as read")
     print("  [3] Don't mark anything")
@@ -132,6 +135,11 @@ def main():
             print("No important emails to mark.")
     else:
         print("No emails marked as read.")
+
+
+def main():
+    for account in ACCOUNTS:
+        process_account(account)
 
 
 if __name__ == "__main__":
