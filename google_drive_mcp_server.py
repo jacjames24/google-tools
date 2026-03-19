@@ -151,5 +151,57 @@ def get_drive_folder_id(account: str = "Personal", folder_name: str = "") -> str
     return json.dumps({"folders": folders, "total": len(folders)}, indent=2)
 
 
+@mcp.tool()
+def read_sheet(account: str, file_id: str, sheet_name: str = "") -> str:
+    """
+    Export a Google Sheet as CSV and return its contents as a formatted table.
+
+    Args:
+        account: Account name — "Personal" or "Freelance"
+        file_id: The file ID of the Google Sheet (from the URL)
+        sheet_name: Optional specific sheet/tab name to export (default: first sheet)
+    """
+    service = _get_service(account)
+
+    # Build export URL with optional sheet name
+    export_params = {"mimeType": "text/csv"}
+    if sheet_name:
+        export_params["exportFormat"] = "csv"
+
+    request = service.files().export(fileId=file_id, mimeType="text/csv")
+    buffer = io.BytesIO()
+    downloader = MediaIoBaseDownload(buffer, request)
+    done = False
+    while not done:
+        _, done = downloader.next_chunk()
+
+    csv_content = buffer.getvalue().decode("utf-8")
+
+    # Parse CSV into a readable format
+    import csv
+    reader = csv.reader(csv_content.splitlines())
+    rows = list(reader)
+
+    if not rows:
+        return json.dumps({"error": "Sheet is empty"})
+
+    # Format as markdown table
+    headers = rows[0]
+    lines = ["| " + " | ".join(headers) + " |"]
+    lines.append("|" + "|".join(["---"] * len(headers)) + "|")
+    for row in rows[1:]:
+        # Pad row if shorter than headers
+        padded = row + [""] * (len(headers) - len(row))
+        lines.append("| " + " | ".join(padded) + " |")
+
+    return json.dumps({
+        "file_id": file_id,
+        "rows": len(rows) - 1,
+        "columns": len(headers),
+        "table": "\n".join(lines),
+        "raw_csv": csv_content
+    }, indent=2)
+
+
 if __name__ == "__main__":
     mcp.run()
