@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__drive__list_sheets",
+      "Bash(python:*)",
+      "mcp__drive__read_sheet",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "mcp__claude_ai_Google_Calendar__gcal_list_calendars",
+      "mcp__claude_ai_Google_Calendar__gcal_list_events",
+      "mcp__claude_ai_Google_Calendar__gcal_create_event"
+    ]
+  }
+}

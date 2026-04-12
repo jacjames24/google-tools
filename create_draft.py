@@ -31,7 +31,7 @@ BODY = f"""<div style="font-family:Arial,sans-serif;font-size:14px;color:#222;li
 
 <p>Hope this email finds you well.</p>
 
-<p>Attached to this email is the result of my sanity testing and observations for AccuRad iOS 2.11.0(4), AccuRad Android 2.11.0, and RDS Android 2.1.0.7, covering the period of March 21 to March 29, 2026.</p>
+<p>Attached to this email is the result of my testing and observations for both AccuRad and RDS from the period of March 30 to April 12, 2026.</p>
 
 <p>That said, please refer to the test parameters as seen below.</p>
 
@@ -57,28 +57,30 @@ BODY = f"""<div style="font-family:Arial,sans-serif;font-size:14px;color:#222;li
 
 <p>Testing for AccuRad iOS version 2.11.0(4) was carried out on the iPhone 12 Pro Max as a daily driver throughout the testing period.</p>
 
-<p>Overall, connectivity with PRD 000003 was relatively okay. While brief intermittent disconnections occurred at various points, the app consistently re-established the Bluetooth connection on its own without requiring manual intervention. It is worth noting that I test in a consistently crowded environment with many nearby Bluetooth devices, which naturally adds some pressure to BT stability.</p>
+<p>Overall, connectivity with PRD 000003 was relatively stable, though the pattern varied across the two-week period. During the first several days (March 30 through April 4), the 30-MIN graph showed sparse and intermittent data with limited alarm capture, which is consistent with the phone being further from the PRD during that stretch, along with the natural Bluetooth interference from the consistently crowded environment I test in.</p>
 
-<p>Alarm capture was functioning as expected across the testing period. Multiple High Alarms were recorded across several days, including a cluster on March 25 between 9:14 AM and 9:42 AM registering 7.4, 11.9, and 9.8 microRem/h. Low Alarm capture was also verified on March 27 (3.3 microRem/h). All alarm events were accurately timestamped and categorized throughout the period.</p>
+<p>From April 5 onward, connectivity improved considerably and alarm capture resumed daily. On April 7 and April 8 in particular, the app showed notably strong performance &mdash; the graph on April 7 was dense and continuous across the afternoon and evening, while April 8 displayed dense data from morning through evening across multiple time windows. The app consistently re-established the Bluetooth connection on its own following any brief disconnections, without requiring manual intervention.</p>
 
-<p>The 30-MIN graph view generally reflected connection status, with dense data during periods of sustained connectivity and sparse or empty segments during brief disconnections. No critical bugs or unexpected behaviors were observed during this sanity test.</p>
+<p>Alarm capture across the second half of the period was consistent, with multiple High Alarms logged across several days and values generally ranging from 5 to 9 microRem/h. The highest reading of the period was 14.3 microRem/h on April 8 (08:00&ndash;08:02 PM, 35 seconds). A Low Alarm was also captured on April 9 (4.1 microRem/h, 07:34&ndash;07:36 PM, 54 seconds). All alarm events were accurately timestamped and categorized throughout the period. No critical bugs or unexpected behaviors were observed.</p>
 
 <h3 style="color:#2c3e50;margin-top:24px;margin-bottom:4px;">AccuRad Android &ndash; Observations</h3>
 
-<p>Testing for AccuRad Android version 2.11.0 was carried out on the Samsung Galaxy S22 as a secondary device, with the connection open throughout.</p>
+<p>Testing for AccuRad Android version 2.11.0 was carried out on the Samsung Galaxy S22 as a secondary device, with the connection open throughout the testing period from March 30 through April 10, 2026.</p>
 
-<p>The Android version generally demonstrated strong background Bluetooth performance. The 30-MIN graph was dense and continuous across most days, including March 23, March 25, March 27, March 28, and March 29, reflecting stable and uninterrupted PRD connectivity (ACR00002F). Alarm capture was consistent throughout, with High Alarms logged across all active testing days.</p>
+<p>The Android version generally demonstrated stronger and more consistent background Bluetooth performance compared to iOS, particularly during the second week. Dense, continuous data was observed on March 30, April 6, April 7, April 8, and April 9. April 7 was a standout day with data recorded from as early as 4 AM through midnight, reflecting near-continuous PRD connectivity (ACR00002F).</p>
 
-<p>It is worth noting that on March 24 and March 26, the graph showed significantly sparse data during daytime hours, with only isolated data points recorded rather than a continuous line. Connectivity appeared to resume later in the evening on both days, as alarms were still captured during those windows. The daytime gaps may have been due to the device being out of PRD range during those specific periods.</p>
+<p>During the earlier part of the period (March 31 through April 2), some daytime windows showed sparse or isolated data points rather than a continuous line, with connectivity improving in the evenings. The daytime gaps likely corresponded to periods when the device was out of PRD range, as alarms were still captured once the connection re-established in the evening. No screenshots were captured for April 4 and April 5. From April 6 onward, the graph was consistently dense throughout each day's active windows.</p>
+
+<p>Alarm capture was steady across all active testing days, with High Alarms logged consistently and readings ranging from 3.3 to 7.3 microRem/h. A notably longer-duration alarm was captured on April 8 (7.1 microRem/h, 08:24&ndash;08:25 PM, 52 seconds).</p>
 
 <h3 style="color:#2c3e50;margin-top:24px;margin-bottom:4px;">RDS Android &ndash; Observations</h3>
 
 <p>Testing for RDS Android version 2.1.0.7 was carried out on the Samsung Galaxy S22 as a secondary device.</p>
 
-<p>The RDS-32 (SN: 2001638) connected successfully and was actively logging dose data during the testing session on March 29, with an accumulated dose of 36.7 mrem and a live reading of 4 &micro;Rem/h. The gradient map in the Events tab displayed the route path correctly in cyan, consistent with normal background radiation levels. The 5-MIN dose rate graph showed a step-up pattern starting around 7:10 PM, accurately reflecting dose accumulation during movement. No issues were observed with connectivity, map display, or dose tracking.</p>
+<p>The RDS-32 (SN: 2001638) connected successfully on April 12, with the home screen confirming an accumulated dose of 36.8 mrem and a live reading of 4 &micro;Rem/h. Battery was at full charge during the session. The 5-MIN dose rate graph in the Events tab showed a stepped pattern starting from approximately 5:55 PM, accurately reflecting dose accumulation over the session. The map view displayed the current location marker during stationary use. No gradient path was visible, which is consistent with background radiation levels at approximately 4 &micro;Rem/h &mdash; below the visible threshold on the color scale, which starts at 5.0 &micro;Rem/h. No issues were observed with connectivity or dose tracking.</p>
 
 <p>As for the screenshots, please refer to the URL below:<br>
-<a href="https://drive.google.com/drive/folders/1LnQsik77a_OfSVvKtAixcPMDCTOEzywn?usp=sharing" style="color:#2980b9;">https://drive.google.com/drive/folders/1LnQsik77a_OfSVvKtAixcPMDCTOEzywn?usp=sharing</a></p>
+<a href="https://drive.google.com/drive/folders/1uCpnDglGeokc0MIK-3AF77PlTeNMJNIX?usp=sharing" style="color:#2980b9;">https://drive.google.com/drive/folders/1uCpnDglGeokc0MIK-3AF77PlTeNMJNIX?usp=sharing</a></p>
 
 <p>Best regards,<br>Jackie</p>
 
